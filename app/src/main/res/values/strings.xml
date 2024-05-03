@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Nil Da</string>
+    <string name="sign_up_txt">Don\'t Have an account?<u><font fgcolor='#C62828'>SignUp</font></u></string>
+    <string name="login_txt">Already Registered? <u><font fgcolor='#C62828'>Log in Here</font></u></string>
+    <string name="teg_txt">Join our telegram  <u><font fgcolor='#C62828'>https://t.me/nr_devloper</font></u></string>
+    <string name="back_login">Back to  <u><font fgcolor='#C62828'>Home Class</font></u></string>
+</resources>

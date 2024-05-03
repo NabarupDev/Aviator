@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "336547358050",
+    "project_id": "avator-dd16f",
+    "storage_bucket": "avator-dd16f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336547358050:android:f729b2a2aabeb414f5383b",
+        "android_client_info": {
+          "package_name": "com.nabarup.avator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcfg6H13d8ecgaxWexx3RRsJFm8Ir0qH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
