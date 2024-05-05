@@ -7,45 +7,48 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.Random;
 
 public class Predict extends AppCompatActivity {
 
     Button activationBtn, predictBtn;
     ImageView logo;
-    TextView appName, generatedNum, telegram;
+    TextView Loading_txt;
+    TextView appName, generatedNum, telegram, Predict_btn_txt;
     boolean isFirstTime = true;
     boolean isActivated = false;
     EditText activationCodeInput;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_predict);
 
         activationBtn = findViewById(R.id.activation_btn);
+        Loading_txt = findViewById(R.id.loading_txt);
         predictBtn = findViewById(R.id.get_pd_btn);
         logo = findViewById(R.id.logo);
         appName = findViewById(R.id.app_name);
-        generatedNum = findViewById(R.id.number_gn);
         telegram = findViewById(R.id.teg_txt);
+        generatedNum = findViewById(R.id.number_gn); // Initialize generatedNum TextView
         activationCodeInput = findViewById(R.id.dialogMessage);
 
         activationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                showInputDialog();
             }
         });
 
@@ -53,15 +56,47 @@ public class Predict extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isActivated) {
-                    generateNumber();
+                    predictBtn.setVisibility(View.INVISIBLE);
+                    Animation slideInLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_left);
+                    Loading_txt.startAnimation(slideInLeft);
+                    Loading_txt.setVisibility(View.VISIBLE);
+                    simulateBackgroundTask();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Animation slideOutRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_right);
+                            Loading_txt.startAnimation(slideOutRight);
+                            Loading_txt.setVisibility(View.INVISIBLE);
+                            predictBtn.setVisibility(View.VISIBLE);
+                            generateNumber();
+                        }
+                    }, 2000);
                 } else {
-                    showDemoDialog();
+                    showContactDialog();
                     // Toast.makeText(Predict.this, "Please activate the app first", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        telegram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://t.me/nr_devlope";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+
+
     }
-    private void showDemoDialog() {
+    private void simulateBackgroundTask() {
+        try {
+            // Simulate some delay
+            Thread.sleep(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void showContactDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Aviator Predictor v4.0 is not activated!")
                 .setMessage("You need to activate Aviator Predictor v4.0. For this, you need to contact Aviator Predictor Admin.\n" +
@@ -79,7 +114,7 @@ public class Predict extends AppCompatActivity {
                 .show();
     }
 
-    private void showDialog() {
+    private void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View dialogView = LayoutInflater.from(this).inflate(R.layout.active_bg, null);
@@ -129,3 +164,4 @@ public class Predict extends AppCompatActivity {
         animator.start();
     }
 }
+

@@ -1,6 +1,8 @@
 package com.nabarup.avator.login;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +34,8 @@ public class Forgot_pass extends AppCompatActivity {
 
         sendemail = findViewById(R.id.send_email_button);
         ForgotEmail = findViewById(R.id.for_email);
+        red_login = findViewById(R.id.red_login);
+        telegram = findViewById(R.id.teg_txt);
 
         sendemail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +44,22 @@ public class Forgot_pass extends AppCompatActivity {
                     String email = ForgotEmail.getText().toString().trim();
                     sendPasswordResetEmail(email);
                 }
+            }
+        });
+        red_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Forgot_pass.this,Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        telegram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://t.me/nr_devlope";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
             }
         });
 

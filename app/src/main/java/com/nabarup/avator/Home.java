@@ -1,22 +1,19 @@
 package com.nabarup.avator;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 
 public class Home extends AppCompatActivity {
 
@@ -46,7 +43,6 @@ public class Home extends AppCompatActivity {
         grid.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Check which image was clicked
                 int imageResource = arr_img.get(position);
                 if (imageResource == R.drawable.win) {
                     Intent intent = new Intent(Home.this, Predict.class);
