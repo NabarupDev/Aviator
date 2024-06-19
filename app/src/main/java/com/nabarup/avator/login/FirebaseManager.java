@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.nabarup.avator.BuildConfig;
 
 public class FirebaseManager {
@@ -20,3 +18,5 @@ public class FirebaseManager {
         FirebaseApp.initializeApp(context, options, "com.nabarup.avator");
     }
 }
+
+

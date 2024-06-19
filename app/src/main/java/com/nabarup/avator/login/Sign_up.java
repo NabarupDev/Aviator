@@ -1,8 +1,8 @@
 package com.nabarup.avator.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.nabarup.avator.BuildConfig;
 import com.nabarup.avator.HelperClass;
 import com.nabarup.avator.R;
@@ -34,10 +39,13 @@ public class Sign_up extends AppCompatActivity {
     EditText password_edit_box, sign_name, sign_email, sign_number;
     Button sign_up_btn;
     FirebaseDatabase database;
+    ProgressBar progressBar;
+    String emailPattern = "[a-zA-Z0-9._%+-]+@gmail\\.[a-z]+";
     Context context;
     DatabaseReference reference;
     private static final String FIREBASE_APP_NAME = "com.nabarup.avator";
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,61 +58,88 @@ public class Sign_up extends AppCompatActivity {
         sign_number = findViewById(R.id.signup_number);
         sign_up_btn = findViewById(R.id.sign_up_button);
         login_txt = findViewById(R.id.login_txt);
-        telegram = findViewById(R.id.teg_txt);
+        progressBar = findViewById(R.id.progrssbar);
         passwordVisibilityToggle = findViewById(R.id.pass_view_img);
         password_edit_box = findViewById(R.id.sign_up_pass);
 
         sign_up_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                sign_up_btn.setVisibility(View.INVISIBLE);
                 if (validateInput()) {
-                    FirebaseOptions options = new FirebaseOptions.Builder()
-                            .setApplicationId(BuildConfig.APPLICATION_ID)
-                            .setApiKey("AIzaSyDcfg6H13d8ecgaxWexx3RRsJFm8Ir0qH4")
-                            .setDatabaseUrl("https://avator-dd16f-default-rtdb.firebaseio.com/")
-                            .setProjectId("avator-dd16f")
-                            .build();
+                    final String email = sign_email.getText().toString().trim();
+                    final String phone_no = sign_number.getText().toString().trim();
+                    // Check if the email is already registered
+                    isEmailAlreadyRegistered(email, new EmailCheckCallback() {
+                        @Override
+                        public void onCallback(boolean isEmailRegistered) {
+                            if (isEmailRegistered) {
+                                // Email already registered
+                                progressBar.setVisibility(View.INVISIBLE);
+                                sign_up_btn.setVisibility(View.VISIBLE);
+                                Toast.makeText(Sign_up.this, "User already registered with this email!", Toast.LENGTH_LONG).show();
+                            } else {
+                                // Check if the phone number is already registered
+                                isPhoneNumberAlreadyRegistered(phone_no, new PhoneNumberCheckCallback() {
+                                    @Override
+                                    public void onCallback(boolean isPhoneRegistered) {
+                                        if (isPhoneRegistered) {
+                                            // Phone number already registered
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            sign_up_btn.setVisibility(View.VISIBLE);
+                                            Toast.makeText(Sign_up.this, "Phone number already registered!", Toast.LENGTH_LONG).show();
+                                            // sign_number.setError("Phone number already registered");
+                                        } else {
+                                            // Proceed to sign-up
+                                            progressBar.setVisibility(View.VISIBLE);
+                                            sign_up_btn.setVisibility(View.INVISIBLE);
+                                            FirebaseOptions options = new FirebaseOptions.Builder()
+                                                    .setApplicationId(BuildConfig.APPLICATION_ID)
+                                                    .setApiKey("AIzaSyDcfg6H13d8ecgaxWexx3RRsJFm8Ir0qH4")
+                                                    .setDatabaseUrl("https://avator-dd16f-default-rtdb.firebaseio.com/")
+                                                    .setProjectId("avator-dd16f")
+                                                    .build();
 
-                    FirebaseApp app = FirebaseApp.initializeApp(context, options, FIREBASE_APP_NAME);
-                    database = FirebaseDatabase.getInstance(app);
-                    reference = database.getReference("users");
+                                            FirebaseApp app = FirebaseApp.initializeApp(context, options, FIREBASE_APP_NAME);
+                                            database = FirebaseDatabase.getInstance(app);
+                                            reference = database.getReference("users");
 
-                    String name = sign_name.getText().toString();
-                    String number = sign_number.getText().toString();
-                    String email = sign_email.getText().toString();
-                    String password = password_edit_box.getText().toString();
+                                            String name = sign_name.getText().toString();
+                                            String number = sign_number.getText().toString();
+                                            String password = password_edit_box.getText().toString();
 
-                    String hashedPassword = hashPassword(password);
+                                            String hashedPassword = hashPassword(password);
 
-                    String uid = reference.push().getKey();
+                                            String uid = reference.push().getKey();
 
-                    HelperClass helperClass = new HelperClass(name, email, number, hashedPassword);
+                                            HelperClass helperClass = new HelperClass(name, email, number, hashedPassword);
 
-                    reference.child(uid).setValue(helperClass);
+                                            reference.child(uid).setValue(helperClass);
 
-                    Toast.makeText(Sign_up.this, "You have signed up successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Sign_up.this, Login.class);
-                    startActivity(intent);
-                    finish();
+                                            Toast.makeText(Sign_up.this, "You have signed up successfully!", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(Sign_up.this, Login.class);
+                                            startActivity(intent);
+                                            finish();
+
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    sign_up_btn.setVisibility(View.VISIBLE);
                 }
             }
         });
-
-
 
         login_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Sign_up.this, Login.class);
-                startActivity(intent);
-            }
-        });
-
-        telegram.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://t.me/nr_devlope";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             }
         });
@@ -117,7 +152,6 @@ public class Sign_up extends AppCompatActivity {
         });
     }
 
-    // Validate email and password input
     private boolean validateInput() {
         String name = sign_name.getText().toString().trim();
         String email = sign_email.getText().toString().trim();
@@ -125,20 +159,40 @@ public class Sign_up extends AppCompatActivity {
         String password = password_edit_box.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            sign_name.setError("Name cannot be empty");
+            sign_name.setError("Name can't be empty");
+            return false;
+        } else if (name.length() < 3) {
+            sign_name.setError("Enter a valid name");
             return false;
         } else if (TextUtils.isEmpty(email)) {
-            sign_email.setError("Email cannot be empty");
+            sign_email.setError("Email can't be empty");
+            return false;
+        } else if (email.length() < 15) {
+            sign_email.setError("Enter a valid email");
+            return false;
+        } else if (!email.matches(emailPattern)) {
+            sign_email.setError("Invalid email address");
             return false;
         } else if (TextUtils.isEmpty(phone_no)) {
-            sign_number.setError("Phone Number cannot be empty");
+            sign_number.setError("Phone Number can't be empty");
+            return false;
+        } else if (phone_no.length() != 10) {
+            sign_number.setError("Phone Number must be 10 digits");
+            return false;
+        } else if (!phone_no.matches("[6-9]\\d{9}")) {
+            // Check if the phone number don't starts with 6, 7, 8, or 9
+            sign_number.setError("Please enter a valid phone number");
             return false;
         } else if (TextUtils.isEmpty(password)) {
-            password_edit_box.setError("Password cannot be empty");
+            password_edit_box.setError("Password can't be empty");
+            return false;
+        } else if (password.length() < 5) {
+            password_edit_box.setError("Password must be at least 5 characters");
             return false;
         }
         return true;
     }
+
 
     @Override
     protected void onResume() {
@@ -174,11 +228,55 @@ public class Sign_up extends AppCompatActivity {
         int inputType = password_edit_box.getInputType();
         if (inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
             password_edit_box.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            passwordVisibilityToggle.setImageResource(R.drawable.ic_eye); // Set eye icon
+            passwordVisibilityToggle.setImageResource(R.drawable.ic_eye);
         } else {
             password_edit_box.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             passwordVisibilityToggle.setImageResource(R.drawable.ic_eye_off);
         }
         password_edit_box.setSelection(password_edit_box.getText().length());
+    }
+
+    interface EmailCheckCallback {
+        void onCallback(boolean isEmailRegistered);
+    }
+
+    interface PhoneNumberCheckCallback {
+        void onCallback(boolean isPhoneRegistered);
+    }
+
+    // Email is already registered
+    private void isEmailAlreadyRegistered(final String email, final EmailCheckCallback callback) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        Query emailQuery = usersRef.orderByChild("email").equalTo(email);
+        emailQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callback.onCallback(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors
+                Toast.makeText(Sign_up.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Phone number is already registered
+    private void isPhoneNumberAlreadyRegistered(final String phoneNumber, final PhoneNumberCheckCallback callback) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        Query phoneQuery = usersRef.orderByChild("phone_no").equalTo(phoneNumber);
+        phoneQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callback.onCallback(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors
+                Toast.makeText(Sign_up.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

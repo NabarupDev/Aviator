@@ -1,69 +1,51 @@
 package com.nabarup.avator.login;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyProperties;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.nabarup.avator.BuildConfig;
-import com.nabarup.avator.HelperClass;
 import com.nabarup.avator.Home;
 import com.nabarup.avator.R;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.KeyStore;
-import java.security.Key;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class Login extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
     Button loginButton;
+    ProgressBar progressBar;
     TextView signupRedirectText, Forgot_password;
     ImageView passwordVisibilityToggle;
-
+    String gmailPattern = "[a-zA-Z0-9._%+-]+@gmail\\.[a-z]+";
     private SharedPreferences sharedPref;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         sharedPref = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE);
-
         boolean loggedInBefore = sharedPref.getBoolean("loggedInBefore", false);
 
         if (loggedInBefore) {
@@ -77,10 +59,10 @@ public class Login extends AppCompatActivity {
             loginEmail = findViewById(R.id.login_email);
             loginPassword = findViewById(R.id.login_pass);
             loginButton = findViewById(R.id.login_button);
+            progressBar = findViewById(R.id.progrssbar);
             passwordVisibilityToggle = findViewById(R.id.pass_view_img);
             signupRedirectText = findViewById(R.id.signupRedirectText);
             Forgot_password = findViewById(R.id.forgot_pass);
-
 
             Forgot_password.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,6 +78,8 @@ public class Login extends AppCompatActivity {
                     if (validateInput()) {
                         String email = loginEmail.getText().toString().trim();
                         String password = loginPassword.getText().toString().trim();
+                        progressBar.setVisibility(View.VISIBLE);
+                        loginButton.setVisibility(View.INVISIBLE);
                         checkUser(email, password);
                     }
                 }
@@ -109,15 +93,6 @@ public class Login extends AppCompatActivity {
                     finish();
                 }
             });
-
-            passwordVisibilityToggle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    togglePasswordVisibility();
-                }
-            });
-
-
         }
     }
 
@@ -128,7 +103,10 @@ public class Login extends AppCompatActivity {
         if (TextUtils.isEmpty(email)) {
             loginEmail.setError("Email cannot be empty");
             return false;
-        } else if (TextUtils.isEmpty(password)) {
+        }else if (!email.matches(gmailPattern)) {
+            loginEmail.setError("Invalid email address");
+            return false;
+        }else if (TextUtils.isEmpty(password)) {
             loginPassword.setError("Password cannot be empty");
             return false;
         }
@@ -142,8 +120,10 @@ public class Login extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.INVISIBLE);
+                loginButton.setVisibility(View.VISIBLE);
                 if (dataSnapshot.exists()) {
-                    // User exists
+                    // User already login
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String passwordFromDB = snapshot.child("password").getValue(String.class);
 
@@ -159,7 +139,9 @@ public class Login extends AppCompatActivity {
                             return;
                         }
                     }
-                    loginPassword.setError("Incorrect password");
+
+                    Toast.makeText(Login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                    // loginPassword.setError("Incorrect password");
                 } else {
                     loginEmail.setError("No user with this email exists");
                 }
@@ -169,20 +151,10 @@ public class Login extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("LoginActivity", "DatabaseError: " + databaseError.getMessage());
                 Toast.makeText(Login.this, "DatabaseError", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                loginButton.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void togglePasswordVisibility() {
-        int inputType = loginPassword.getInputType();
-        if (inputType == InputType.TYPE_CLASS_TEXT || inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD) {
-            loginPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            passwordVisibilityToggle.setImageResource(R.drawable.ic_eye_off);
-        } else {
-            loginPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            passwordVisibilityToggle.setImageResource(R.drawable.ic_eye);
-        }
-        loginPassword.setSelection(loginPassword.getText().length());
     }
 
     private String hashPassword(String password) {

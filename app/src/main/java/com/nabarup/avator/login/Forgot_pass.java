@@ -35,7 +35,6 @@ public class Forgot_pass extends AppCompatActivity {
         sendemail = findViewById(R.id.send_email_button);
         ForgotEmail = findViewById(R.id.for_email);
         red_login = findViewById(R.id.red_login);
-        telegram = findViewById(R.id.teg_txt);
 
         sendemail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +88,12 @@ public class Forgot_pass extends AppCompatActivity {
                                         Toast.makeText(Forgot_pass.this, "Password reset email sent.", Toast.LENGTH_SHORT).show();
                                         finish();
                                     } else {
-                                        Toast.makeText(Forgot_pass.this, "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Forgot_pass.this, "Database Error.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                 } else {
-                    Toast.makeText(Forgot_pass.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Forgot_pass.this, "Database Error.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

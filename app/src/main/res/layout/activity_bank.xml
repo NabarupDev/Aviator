@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".bank">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/parentRelative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Checkout TextView -->
+            <TextView
+                android:id="@+id/checkout_txt"
+                android:text="Checkout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/pa_txt"
+                android:text="Pay Using Apps"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/checkout_txt"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30sp" />
+            <RadioGroup
+                android:id="@+id/checked_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/pa_txt"
+                android:layout_below="@+id/checkout_txt"
+                android:gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10sp"
+                android:layout_marginStart="20sp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/pay_using_apps"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:layout_height="30sp"
+                    android:text="Pay Using Apps"
+                    android:enabled="false"
+                    android:textColor="#000000"
+                    android:checked="false"/>
+            </RadioGroup>
+
+
+            <RelativeLayout
+                android:id="@+id/pm_apps"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/checked_box"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/edittext_border"
+                android:layout_height="160dp">
+
+                <View
+                    android:id="@+id/middle"
+                    android:layout_width="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_height="1dp"/>
+
+                <View
+                    android:id="@+id/middle_hr"
+                    android:layout_width="1dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/right_img"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/right_arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:text="You will be redirected to the app"
+                    android:textColor="#000000"
+                    android:layout_toRightOf="@+id/right_img"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="20dp" />
+
+                <RelativeLayout
+                    android:id="@+id/phonepe"
+                    android:layout_width="100dp"
+                    android:layout_below="@+id/right_img"
+                    android:layout_marginEnd="40dp"
+                    android:layout_toLeftOf="@+id/google_pay"
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:id="@+id/phonepe_img"
+                        android:src="@drawable/phonepe"
+                        android:layout_width="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_height="70dp" />
+                    <TextView
+                        android:layout_below="@+id/phonepe_img"
+                        android:text="PhonePe"
+                        android:textColor="#000000"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/google_pay"
+                    android:layout_width="90dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/right_img"
+                    android:layout_height="110dp">
+
+                    <ImageView
+                        android:id="@+id/gpay_img"
+                        android:src="@drawable/google_pay"
+                        android:layout_width="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="60dp" />
+                    <TextView
+                        android:layout_below="@+id/gpay_img"
+                        android:text="Google Pay"
+                        android:textColor="#000000"
+                        android:gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/paytm"
+                    android:layout_width="90dp"
+                    android:layout_below="@+id/right_img"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_toEndOf="@+id/google_pay"
+                    android:layout_height="110dp">
+
+                    <ImageView
+                        android:id="@+id/paytm_img"
+                        android:src="@drawable/paytm"
+                        android:layout_width="70dp"
+                        android:padding="10sp"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_height="70dp" />
+                    <TextView
+                        android:layout_below="@+id/paytm_img"
+                        android:text="Paytm"
+                        android:textColor="#000000"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <!-- Pay With Mobile Number TextView -->
+            <TextView
+                android:id="@+id/pm_txt"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:layout_below="@+id/pm_apps"
+                android:text="Pay With Mobile number"
+                android:layout_width="wrap_content"
+                android:layout_height="30sp" />
+            <RadioGroup
+                android:id="@+id/chacked_box_bl"
+                android:layout_toRightOf="@+id/pm_txt"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/pm_apps"
+                android:gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10sp"
+                android:layout_marginStart="20sp"
+                android:layout_height="30sp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="30sp"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:text="Pay With Mobile number"
+                    android:checked="true"
+                    android:enabled="true" />
+            </RadioGroup>
+
+            <!-- UPI Final RelativeLayout -->
+            <RelativeLayout
+                android:id="@+id/upi_final"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/chacked_box_bl"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_border"
+                android:padding="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="70dp">
+                <ImageView
+                    android:id="@+id/arrow"
+                    android:src="@drawable/arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_toRightOf="@+id/arrow"
+                    android:text="@string/arrow_txt"
+                    android:layout_marginStart="20dp"
+                    android:singleLine="false"
+                    android:layout_width="wrap_content"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <!-- Mobile Number Container RelativeLayout -->
+            <RelativeLayout
+                android:id="@+id/mb_contain"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/upi_final"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/phone_logo"
+                    android:src="@drawable/ic_phone"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/mb_txt"
+                    android:text="Mobile Number"
+                    android:layout_toRightOf="@+id/phone_logo"
+                    android:layout_marginStart="20dp"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <!-- Phone Number EditText -->
+            <EditText
+                android:id="@+id/phno_edit"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/mb_contain"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20sp"
+                android:inputType="number"
+                android:maxLength="10"
+                android:textColor="#000000"
+                android:autofillHints="phone"
+                android:hint="Phone Number"
+                android:textColorHint="#000000"
+                android:background="@drawable/edittext_border"
+                android:padding="10dp" />
+
+            <!-- Choose Your Bank TextView -->
+            <RelativeLayout
+                android:id="@+id/bank_txt"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/phno_edit"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20sp"
+                android:layout_marginStart="20dp"
+                android:layout_height="50sp">
+                <ImageView
+                    android:id="@+id/upi_logo"
+                    android:src="@drawable/upi_logo"
+                    android:layout_width="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_height="40sp" />
+                <TextView
+                    android:id="@+id/bn_txt"
+                    android:text="Choose your Bank"
+                    android:layout_toRightOf="@+id/upi_logo"
+                    android:layout_marginStart="20dp"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <!-- Bank Selection Spinner -->
+            <Spinner
+                android:id="@+id/spinner_banks"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/bank_txt"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:spinnerMode="dropdown"
+                android:layout_marginEnd="20sp"
+                android:background="@drawable/edittext_border"
+                android:theme="@style/CustomSpinnerStyle"
+                android:gravity="center"
+                android:hint="Select Bank"
+                android:textColorHint="#000000" />
+
+
+            <!-- EditText for bank name (initially hidden) -->
+            <EditText
+                android:id="@+id/bank_name"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/spinner_banks"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="20dp"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="150dp"
+                android:inputType="textCapWords"
+                android:textColor="#000000"
+                android:background="@drawable/edittext_border"
+                android:hint="Enter Bank Name"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColorHint="#000000"
+                android:visibility="gone" />
+
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/spinner_banks"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-20dp"
+                    android:elevation="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardPreventCornerOverlap="true"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardElevation="20dp">
+
+                    <RelativeLayout
+                        android:id="@+id/payment_bellow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- Total Payment TextView -->
+
+
+
+                        <RelativeLayout
+                            android:id="@+id/total_pay_card"
+                            android:layout_width="match_parent"
+                            android:layout_marginStart="20dp"
+                            android:layout_height="60sp">
+                            <TextView
+                                android:id="@+id/total_pay_txt"
+                                android:text="Total Payment:"
+                                android:textSize="20sp"
+                                android:textColor="#000000"
+                                android:layout_marginStart="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginEnd="20dp"
+                                android:layout_height="wrap_content">
+
+                                <!-- Total Amount TextView -->
+                                <TextView
+                                    android:id="@+id/total_amount_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="37dp"
+                                    android:gravity="center"
+                                    android:text="₹10.00"
+                                    android:textColor="#000000"
+                                    android:textSize="20sp" />
+
+                                <!-- View Price Details TextView -->
+                                <TextView
+                                    android:id="@+id/pay_details"
+                                    android:layout_below="@+id/total_amount_txt"
+                                    android:text="@string/view_price_details"
+                                    android:textColor="#000000"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                            </RelativeLayout>
+
+                        </RelativeLayout>
+
+
+
+                        <!-- Pay Button -->
+                        <Button
+                            android:id="@+id/pay_btn"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="30sp"
+                            android:text="Pay"
+                            android:layout_below="@+id/total_pay_card"
+                            android:layout_width="150dp"
+                            android:textSize="18sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#068548"
+                            app:cornerRadius="20dp"
+                            android:drawableEnd="@drawable/ic_process"
+                            android:layout_height="60dp"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

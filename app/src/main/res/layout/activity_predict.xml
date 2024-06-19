@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_centerVertical="true"
         android:layout_height="1dp"
-        android:background="@color/black" />
+        android:textColor="#000000" />
 
     <View
         android:id="@+id/middle_hr"
         android:layout_width="1dp"
         android:layout_centerHorizontal="true"
         android:layout_height="match_parent"
-        android:background="@color/black" />
+        android:background="#000000" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_centerVertical="true"
             android:layout_height="1dp"
-            android:background="@color/black" />
+            android:background="#000000" />
         <ImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         <TextView
             android:id="@+id/app_name"
             android:text="Aviator Predictor v4.0"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:textColor="@color/red"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/middle_rl"
@@ -71,20 +71,6 @@
             app:cornerRadius="10dp"
             android:text="Get Prediction!"/>
 
-    <TextView
-        android:id="@+id/loading_txt"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/number_gn"
-        android:layout_marginEnd="31dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="32dp"
-        android:visibility="invisible"
-        android:text="Loading..."
-        android:gravity="center"
-        android:layout_width="300dp"
-        android:layout_height="60dp"/>
 
     <Button
         android:id="@+id/activation_btn"
@@ -105,21 +91,13 @@
     <TextView
         android:id="@+id/number_gn"
         android:text="1.00x"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:textSize="55sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/teg_txt"
-        android:layout_alignParentBottom="true"
-        android:textColor="#FFFFFF"
-        android:text="@string/teg_txt"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_height="wrap_content"/>
+
 
 
 </RelativeLayout>
